@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h2>Offres d'Emploi</h2>
+
+    <!-- Exemple d'annonce d'offre d'emploi -->
+    <div class="job-listing card">
+        <div class="card-body">
+            <h5 class="card-title">Nom / Intitulé de l'offre</h5>
+            <p class="card-text">Description</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Entreprise:</strong> Nom de l'entreprise</li>
+                <li class="list-group-item"><strong>Date:</strong> Date de l'offre</li>
+                <li class="list-group-item"><strong>Lieu de travail:</strong> Lieu de travail de l'offre</li>
+                <li class="list-group-item"><strong>Type de contrat:</strong> Type de contrat (CDI, CDD)</li>
+                <li class="list-group-item"><strong>Durée du contrat:</strong> Durée du contrat</li>
+                <li class="list-group-item"><strong>Expérience:</strong> Niveau d'expérience requis</li>
+                <li class="list-group-item"><strong>Exigences / Qualifications:</strong> Permis, compétences, etc.</li>
+                <li class="list-group-item"><strong>Qualification:</strong> Niveau de qualification requis</li>
+                <li class="list-group-item"><strong>Qualités professionnelles:</strong> Qualités recherchées</li>
+                <li class="list-group-item"><strong>Formations:</strong> Formations requises</li>
+                <li class="list-group-item"><strong>Langues:</strong> Langues requises</li>
+                <li class="list-group-item"><strong>Salaire:</strong> Rémunération proposée</li>
+                <li class="list-group-item"><strong>Contact:</strong> Coordonnées de contact</li>
+                <li class="list-group-item"><strong>Origine de l'offre:</strong> Source de l'offre (où elle a été extraite)</li>
+            </ul>
+            <button class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
