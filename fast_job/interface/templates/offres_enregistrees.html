@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Offres Enregistrées</h1>
+    <ul>
+        {% for offre in offres_enregistrees %}
+            <li>
+                {{ offre.offre.intitule }}
+                <form method="post" action="{% url 'supprimer_offre' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="offre_id" value="{{ offre.offre.id }}">
+                    <button type="submit">Supprimer</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

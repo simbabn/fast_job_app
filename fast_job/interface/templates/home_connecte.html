@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Offres d'emploi</h1>
+
+    <button id="toggle-filters" class="btn btn-secondary">Afficher les filtres</button>
+
+    <form method="get" id="filter-form" style="display: none;">
+        {{ filter_form.as_p }}
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+    
+
+    <table class="table table-striped table-hover table-bordered">
+        {% if offres_emplois %}
+            {% for offre in offres_emplois %}
+                <div class="job-listing card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ offre.intitule }}</h3>
+                        <p class="card-text">{{ offre.description }}</p>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Entreprise:</strong> {{ offre.entreprise }}</li>
+                            <li class="list-group-item"><strong>Date:</strong> {{ offre.dateCreation }}</li>
+                            <li class="list-group-item"><strong>Lieu de travail:</strong> {{ offre.lieuTravail }}</li>
+                            <li class="list-group-item"><strong>Type de contrat:</strong> {{ offre.typeContratLibelle }}</li>
+                            <li class="list-group-item"><strong>Durée du contrat:</strong> {{ offre.dureeTravailLibelle }}</li>
+                            <li class="list-group-item"><strong>Expérience:</strong> {{ offre.experienceLibelle }}</li>
+                            <li class="list-group-item"><strong>Exigences / Qualifications:</strong> {{ offre.exigence }}</li>
+                            <li class="list-group-item"><strong>Qualification:</strong> {{ offre.qualificationLibelle }}</li>
+                            <li class="list-group-item"><strong>Qualités professionnelles:</strong> {{ offre.qualitesProfessionnelles }}</li>
+                            <li class="list-group-item"><strong>Formations:</strong> {{ offre.formations }}</li>
+                            <li class="list-group-item"><strong>Langues:</strong> {{ offre.langues }}</li>
+                            <li class="list-group-item"><strong>Salaire:</strong> {{ offre.salaire }}</li>
+                            <li class="list-group-item"><strong>Contact:</strong> {{ offre.contact }}</li>
+                            <li class="list-group-item"><strong>Origine de l'offre:</strong> {{ offre.origineOffre }}</li>
+                            <!-- Ajoutez ici les autres champs de votre modèle -->
+                            <li class="list-group-item"><strong>Code ROME:</strong> {{ offre.romeCode }}</li>
+                            <li class="list-group-item"><strong>Appellation Libelle:</strong> {{ offre.appellationlibelle }}</li>
+                            <li class="list-group-item"><strong>Nature Contrat:</strong> {{ offre.natureContrat }}</li>
+                            <li class="list-group-item"><strong>Alternance:</strong> {{ offre.alternance }}</li>
+                            <li class="list-group-item"><strong>Nombre de Postes:</strong> {{ offre.nombrePostes }}</li>
+                            <li class="list-group-item"><strong>Accessible aux travailleurs handicapés:</strong> {{ offre.accessibleTH }}</li>
+                            <li class="list-group-item"><strong>Code NAF:</strong> {{ offre.codeNAF }}</li>
+                            <li class="list-group-item"><strong>Secteur d'Activité Libelle:</strong> {{ offre.secteurActiviteLibelle }}</li>
+                            <li class="list-group-item"><strong>Deplacement Code:</strong> {{ offre.deplacementCode }}</li>
+                            <li class="list-group-item"><strong>Deplacement Libelle:</strong> {{ offre.deplacementLibelle }}</li>
+                            <li class="list-group-item"><strong>Offres Manque Candidats:</strong> {{ offre.offresManqueCandidats }}</li>
+                            <li class="list-group-item"><strong>Complement Exercice:</strong> {{ offre.complementExercice }}</li>
+                            <li class="list-group-item"><strong>Permis:</strong> {{ offre.permis }}</li>
+                            <li class="list-group-item"><strong>Condition d'Exercice:</strong> {{ offre.conditionExercice }}</li>
+                        </ul>
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="offre_id" value="{{ offre.id }}">
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </table>
+
+    <div class="pagination mt-4">
+        <ul class="pagination justify-content-center">
+            {% if offres_emplois.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="première">&laquo; première</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ offres_emplois.previous_page_number }}" aria-label="précédent">précédent</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&laquo; première</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">précédent</span>
+                </li>
+            {% endif %}
+    
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ offres_emplois.number }} sur {{ offres_emplois.paginator.num_pages }}</span>
+            </li>
+    
+            {% if offres_emplois.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ offres_emplois.next_page_number }}" aria-label="suivant">suivant</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ offres_emplois.paginator.num_pages }}" aria-label="dernière">dernière &raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">suivant</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">dernière &raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById('toggle-filters').addEventListener('click', function () {
+            var filterForm = document.getElementById('filter-form');
+            if (filterForm.style.display === 'none') {
+                filterForm.style.display = 'block';
+            } else {
+                filterForm.style.display = 'none';
+            }
+        });
+    </script>
+    
+    <style>
+        /* Styles pour les filtres */
+        #filter-form {
+            padding: 10px;
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+
+{% endblock %}

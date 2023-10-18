@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+{% comment %} 
 <div class="container">
     <h2>Offres d'Emploi</h2>
 
@@ -29,6 +29,50 @@
         </div>
     </div>
     
-</div>
+</div> {% endcomment %}
+{% if records %}
+    {% for offre in interface_offreemploi %}
+    <div class="job-listing card mb-4">
+        <div class="card-body">
+        <h3 class="card-title">{{ interface_offreemploi.intitule }}</h3>
+        <p class="card-text">{{ interface_offreemploi.description }}</p>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Entreprise:</strong> {{ interface_offreemploi.entreprise }}</li>
+            <li class="list-group-item"><strong>Date:</strong> {{ interface_offreemploi.dateCreation }}</li>
+            <li class="list-group-item"><strong>Lieu de travail:</strong> {{ interface_offreemploi.lieuTravail }}</li>
+            <li class="list-group-item"><strong>Type de contrat:</strong> {{ interface_offreemploi.typeContratLibelle }}</li>
+            <li class="list-group-item"><strong>Durée du contrat:</strong> {{ interface_offreemploi.dureeTravailLibelle }}</li>
+            <li class="list-group-item"><strong>Expérience:</strong> {{ interface_offreemploi.experienceLibelle }}</li>
+            <li class="list-group-item"><strong>Exigences / Qualifications:</strong> {{ interface_offreemploi.exigence }}</li>
+            <li class="list-group-item"><strong>Qualification:</strong> {{ interface_offreemploi.qualificationLibelle }}</li>
+            <li class="list-group-item"><strong>Qualités professionnelles:</strong> {{ interface_offreemploi.qualitesProfessionnelles }}</li>
+            <li class="list-group-item"><strong>Formations:</strong> {{ interface_offreemploi.formations }}</li>
+            <li class="list-group-item"><strong>Langues:</strong> {{ interface_offreemploi.langues }}</li>
+            <li class="list-group-item"><strong>Salaire:</strong> {{ interface_offreemploi.salaire }}</li>
+            <li class="list-group-item"><strong>Contact:</strong> {{ interface_offreemploi.contact }}</li>
+            <li class="list-group-item"><strong>Origine de l'offre:</strong> {{ interface_offreemploi.origineOffre }}</li>
+            <!-- Ajoutez ici les autres champs de votre modèle -->
+            <li class="list-group-item"><strong>Code ROME:</strong> {{ interface_offreemploi.romeCode }}</li>
+            <li class="list-group-item"><strong>Appellation Libelle:</strong> {{ interface_offreemploi.appellationlibelle }}</li>
+            <li class="list-group-item"><strong>Nature Contrat:</strong> {{ interface_offreemploi.natureContrat }}</li>
+            <li class="list-group-item"><strong>Alternance:</strong> {{ interface_offreemploi.alternance }}</li>
+            <li class="list-group-item"><strong>Nombre de Postes:</strong> {{ interface_offreemploi.nombrePostes }}</li>
+            <li class="list-group-item"><strong>Accessible aux travailleurs handicapés:</strong> {{ interface_offreemploi.accessibleTH }}</li>
+            <li class="list-group-item"><strong>Code NAF:</strong> {{ interface_offreemploi.codeNAF }}</li>
+            <li class="list-group-item"><strong>Secteur d'Activité Libelle:</strong> {{ interface_offreemploi.secteurActiviteLibelle }}</li>
+            <li class="list-group-item"><strong>Deplacement Code:</strong> {{ interface_offreemploi.deplacementCode }}</li>
+            <li class="list-group-item"><strong>Deplacement Libelle:</strong> {{ interface_offreemploi.deplacementLibelle }}</li>
+            <li class="list-group-item"><strong>Offres Manque Candidats:</strong> {{ interface_offreemploi.offresManqueCandidats }}</li>
+            <li class="list-group-item"><strong>Complement Exercice:</strong> {{ interface_offreemploi.complementExercice }}</li>
+            <li class="list-group-item"><strong>Permis:</strong> {{ interface_offreemploi.permis }}</li>
+            <li class="list-group-item"><strong>Condition d'Exercice:</strong> {{ interface_offreemploi.conditionExercice }}</li>
+        </ul>
+
+        <button class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
 
 {% endblock %}
