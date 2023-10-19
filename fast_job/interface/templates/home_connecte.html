@@ -66,10 +66,10 @@
         <ul class="pagination justify-content-center">
             {% if offres_emplois.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1" aria-label="première">&laquo; première</a>
+                    <a class="page-link" href="?page=1{% if get_params %}&{{ get_params }}{% endif %}" aria-label="première">&laquo; première</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ offres_emplois.previous_page_number }}" aria-label="précédent">précédent</a>
+                    <a class="page-link" href="?page={{ offres_emplois.previous_page_number }}{% if get_params %}&{{ get_params }}{% endif %}" aria-label="précédent">précédent</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -86,10 +86,10 @@
     
             {% if offres_emplois.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ offres_emplois.next_page_number }}" aria-label="suivant">suivant</a>
+                    <a class="page-link" href="?page={{ offres_emplois.next_page_number }}{% if get_params %}&{{ get_params }}{% endif %}" aria-label="suivant">suivant</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ offres_emplois.paginator.num_pages }}" aria-label="dernière">dernière &raquo;</a>
+                    <a class="page-link" href="?page={{ offres_emplois.paginator.num_pages }}{% if get_params %}&{{ get_params }}{% endif %}" aria-label="dernière">dernière &raquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -101,6 +101,7 @@
             {% endif %}
         </ul>
     </div>
+    
 
     <script>
         document.getElementById('toggle-filters').addEventListener('click', function () {

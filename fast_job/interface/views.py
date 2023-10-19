@@ -58,8 +58,11 @@ def home(request):
     # Récupérez toutes les offres d'emploi
     all_offreemploi = OffreEmploi.objects.all()
 
+    # Copiez la requête GET dans un QueryDict
+    get_data = request.GET.copy()
+
     # Initialisation du formulaire de recherche et de filtrage
-    filter_form = OffreEmploiFilterForm(request.GET)
+    filter_form = OffreEmploiFilterForm(get_data)
 
     if filter_form.is_valid():
         # Traitez les données du formulaire de filtrage
@@ -89,6 +92,14 @@ def home(request):
             elif alternance == 'Non':
                 filtered_offreemploi = filtered_offreemploi.filter(alternance=False)
 
+        # Remplacez les paramètres de recherche par les valeurs filtrées
+        get_data['keywords'] = keywords
+        get_data['type_contrat'] = type_contrat
+        get_data['lieu_travail'] = lieu_travail
+        get_data['duree_contrat'] = duree_contrat
+        get_data['alternance'] = alternance
+        # Autres paramètres de filtre
+
     else:
         filtered_offreemploi = all_offreemploi
 
@@ -103,7 +114,11 @@ def home(request):
     except EmptyPage:
         interface_offreemploi = paginator.page(paginator.num_pages)
 
-    return render(request, 'home_connecte.html', {'offres_emplois': interface_offreemploi, 'filter_form': filter_form})
+    return render(request, 'home_connecte.html', {
+        'offres_emplois': interface_offreemploi,
+        'filter_form': filter_form,
+        'get_params': get_data.urlencode(),
+    })
 
 
 def logout_user(request):
