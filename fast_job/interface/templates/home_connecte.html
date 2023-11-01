@@ -20,25 +20,33 @@
                         <p class="card-text">{{ offre.description }}</p>
 
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Entreprise:</strong> {{ offre.entreprise }}</li>
+                            <li class="list-group-item"><strong>Entreprise:</strong> {{ offre.entreprise_nom }}</li>
                             <li class="list-group-item"><strong>Date:</strong> {{ offre.dateCreation }}</li>
-                            <li class="list-group-item"><strong>Lieu de travail:</strong> {{ offre.lieuTravail }}</li>
-                            <li class="list-group-item"><strong>Type de contrat:</strong> {{ offre.typeContratLibelle }}</li>
+                            <li class="list-group-item"><strong>Lieu de travail:</strong> {{ offre.lieuTravail_libelle }}</li>
+                            <li class="list-group-item"><strong>Type de contrat:</strong> {{ offre.typeContrat}}  {{ offre.typeContratLibelle }}</li>
                             <li class="list-group-item"><strong>Durée du contrat:</strong> {{ offre.dureeTravailLibelle }}</li>
                             <li class="list-group-item"><strong>Expérience:</strong> {{ offre.experienceLibelle }}</li>
-                            <li class="list-group-item"><strong>Exigences / Qualifications:</strong> {{ offre.exigence }}</li>
+                            <li class="list-group-item"><strong>Exigences / Qualifications:</strong> {{ offre.experienceCommentaire }}</li>
                             <li class="list-group-item"><strong>Qualification:</strong> {{ offre.qualificationLibelle }}</li>
                             <li class="list-group-item"><strong>Qualités professionnelles:</strong> {{ offre.qualitesProfessionnelles }}</li>
                             <li class="list-group-item"><strong>Formations:</strong> {{ offre.formations }}</li>
                             <li class="list-group-item"><strong>Langues:</strong> {{ offre.langues }}</li>
-                            <li class="list-group-item"><strong>Salaire:</strong> {{ offre.salaire }}</li>
-                            <li class="list-group-item"><strong>Contact:</strong> {{ offre.contact }}</li>
+                            <li class="list-group-item">
+                                <strong>Salaire:</strong>
+                                {% if offre.salaire_libelle %}
+                                    {{ offre.salaire_libelle }}
+                                {% endif %}
+                                {% if offre.salaire_complement1 %}
+                                    {{ offre.salaire_complement1 }}
+                                {% endif %}
+                            </li>                            
+                            <li class="list-group-item"><strong>Contact:</strong> {{ offre.contact_courriel}}</li>
                             <li class="list-group-item"><strong>Origine de l'offre:</strong> {{ offre.origineOffre }}</li>
                             <!-- Ajoutez ici les autres champs de votre modèle -->
                             <li class="list-group-item"><strong>Code ROME:</strong> {{ offre.romeCode }}</li>
                             <li class="list-group-item"><strong>Appellation Libelle:</strong> {{ offre.appellationlibelle }}</li>
                             <li class="list-group-item"><strong>Nature Contrat:</strong> {{ offre.natureContrat }}</li>
-                            <li class="list-group-item"><strong>Alternance:</strong> {{ offre.alternance }}</li>
+                            <li class="list-group-item"><strong>Alternance:</strong> {{ offre.alternance_display }}</li>
                             <li class="list-group-item"><strong>Nombre de Postes:</strong> {{ offre.nombrePostes }}</li>
                             <li class="list-group-item"><strong>Accessible aux travailleurs handicapés:</strong> {{ offre.accessibleTH }}</li>
                             <li class="list-group-item"><strong>Code NAF:</strong> {{ offre.codeNAF }}</li>
@@ -49,12 +57,24 @@
                             <li class="list-group-item"><strong>Complement Exercice:</strong> {{ offre.complementExercice }}</li>
                             <li class="list-group-item"><strong>Permis:</strong> {{ offre.permis }}</li>
                             <li class="list-group-item"><strong>Condition d'Exercice:</strong> {{ offre.conditionExercice }}</li>
+                            <li class="list-group-item">
+                                <strong>Lien de l'offre :</strong>
+                                {% if offre.origineOffre_urlOrigine %}
+                                    <a href="{{ offre.origineOffre_urlOrigine|safe }}">{{ offre.origineOffre_urlOrigine }}</a>
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Lien pour postuler  :</strong>
+                                {% if offre.contact_urlPostulation %}
+                                    <a href="{{ offre.contact_urlPostulation|safe }}">{{ offre.contact_urlPostulation }}</a>
+                                {% endif %}
+                            </li>
                         </ul>
 
                         <form method="post" action="">
                             {% csrf_token %}
                             <input type="hidden" name="offre_id" value="{{ offre.id }}">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #0695F1; margin-bottom: 20px;">Enregistrer</button>
                         </form>
                     </div>
                 </div>
@@ -118,10 +138,20 @@
         /* Styles pour les filtres */
         #filter-form {
             padding: 10px;
-            background-color: #f7f7f7;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #ffffff; /* Fond blanc */
+            font-family: 'codec-pro', sans-serif; /* Police en codec pro */
+        }
+
+        .job-listing {
+            background-color: #EFF3F6; /* Fond de chaque annonce */
+        }
+
+        .job-listing, .job-listing a {
+            color: #2E3A44; /* Couleur de la police */
+        }
+
+        .btn-primary {
+            background-color: #0695F1; /* Couleur du bouton "Enregistrer" */
         }
     </style>
-
 {% endblock %}
