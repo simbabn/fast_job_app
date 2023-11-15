@@ -24,7 +24,7 @@ class Record(models.Model):
         return(f"{self.intitule} {self.entreprise}")
     
 class OffreEmploi(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=10, primary_key=True)
     intitule = models.TextField()
     description = models.TextField()
     dateCreation = models.TextField()
@@ -101,6 +101,7 @@ class UserProfile(models.Model):
     compte_linkedin = models.URLField(blank=True)
     compte_twitter = models.CharField(max_length=100, blank=True)
     compte_github = models.URLField(blank=True)
+    offres_enregistrees = models.ManyToManyField(OffreEmploi, related_name='utilisateurs_enregistres')
 
     def __str__(self):
         return self.user.username

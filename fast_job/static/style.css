@@ -1,7 +1,7 @@
 /* style.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: #fff;
     margin: 0;
     padding: 0;
 }
@@ -33,11 +33,21 @@ nav a:hover {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    margin-bottom: 50px; /* Ajout d'une marge basse pour tenir compte de la hauteur du footer */
 }
+.custom-footer {
+    background-color: #0446F1;
+    color: #fff;
+    margin-top: 50px;
+  }
 
 .job-listing {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 20px;
+}
+
+.login-page {
+    min-height: 100vh; /* ou toute autre valeur appropriée */
 }

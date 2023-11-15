@@ -1,0 +1,8 @@
+<ul>
+    {% for offre in offres %}
+      <li>
+        <a href="{% url 'offre_detail' offre.id %}">{{ offre.intitule }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  

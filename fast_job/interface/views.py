@@ -2,9 +2,18 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.shortcuts import render, redirect
-from .forms import SignUpForm, OffreEmploiFilterForm
+from django.shortcuts import render, redirect,  get_object_or_404
+from .forms import SignUpForm, OffreEmploiFilterForm, UserProfileForm
 from .models import OffreEmploi, UserProfile
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 
 def login_user(request):
     if request.method == 'POST':
@@ -22,7 +31,7 @@ def login_user(request):
 
 def home_non_connecte(request):
     # Récupérez les 10 premières offres d'emploi
-    all_offreemploi = OffreEmploi.objects.all()[:10]
+    all_offreemploi = OffreEmploi.objects.all()[:9]
     print(all_offreemploi)
     return render(request, 'home_non_connecte.html', {'offres_emplois': all_offreemploi})
 
@@ -32,7 +41,7 @@ def home_connecte(request):
     all_offreemploi = OffreEmploi.objects.all()
 
     # Créez un objet Paginator
-    paginator = Paginator(all_offreemploi, 10)
+    paginator = Paginator(all_offreemploi, 9)
 
     # Récupérez le numéro de page à partir de la requête GET
     page = request.GET.get('page')
@@ -104,7 +113,7 @@ def home(request):
         filtered_offreemploi = all_offreemploi
 
     # Créez un objet Paginator avec 10 offres par page
-    paginator = Paginator(filtered_offreemploi, 10)
+    paginator = Paginator(filtered_offreemploi, 12)
     page = request.GET.get('page')
 
     try:
@@ -157,3 +166,98 @@ def register_user(request):
 def liste_offres_emploi(request):
     offres = OffreEmploi.objects.all()
     return render(request, 'offres_enregistrees.html', {'offres': offres})
+
+
+@login_required
+def enregistrer_offre_emploi(request, offre_id):
+    user_profile = request.user.userprofile  # Récupérer le profil de l'utilisateur connecté
+    offre_emploi = OffreEmploi.objects.get(pk=offre_id)
+
+    # Vérifiez si l'offre d'emploi est déjà enregistrée par l'utilisateur
+    if offre_emploi in user_profile.offres_enregistrees.all():
+        user_profile.offres_enregistrees.remove(offre_emploi)
+        message = "Offre d'emploi retirée de vos enregistrements."
+    else:
+        user_profile.offres_enregistrees.add(offre_emploi)
+        message = "Offre d'emploi ajoutée à vos enregistrements."
+
+    return JsonResponse({'message': message})
+
+
+@login_required
+def offres_enregistrees(request):
+    offres_enregistrees = OffreEnregistree.objects.filter(utilisateur=request.user)
+    return render(request, 'offres_enregistrees.html', {'offres_enregistrees': offres_enregistrees})
+
+
+def offre_detail(request, offre_id):
+    offre = get_object_or_404(OffreEmploi, id=offre_id)
+    return render(request, 'offre_detail.html', {'offre': offre})
+
+def liste_offres(request):
+    offres = OffreEmploi.objects.all()
+    return render(request, 'liste_offres.html', context={'offres': offres})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileView(View):
+    template_name = 'profile.html'
+
+    def get(self, request, *args, **kwargs):
+        # Récupérez les informations sur l'utilisateur connecté si nécessaire
+        context = {
+            'user': request.user,
+            # Autres données à envoyer au modèle
+        }
+        return render(request, self.template_name, context)
+
+
+@login_required
+def user_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil mis à jour avec succès.')
+            return redirect('user_profile')
+        else:
+            messages.error(request, 'Erreur lors de la mise à jour du profil. Veuillez corriger les erreurs.')
+    else:
+        form = UserProfileForm(instance=request.user)
+    
+    return render(request, 'profile.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileView(View):
+    template_name = 'profile.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+@method_decorator(login_required, name='dispatch')
+class EditUserProfileView(View):
+    template_name = 'edit_user_profile.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        form = UserProfileForm(instance=user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('user_profile')
+        return render(request, self.template_name, {'form': form})
+
+
+def edit_profile(request):
+    # Logique pour afficher le formulaire de modification du profil
+    return render(request, 'profile_form.html')
+
+def view_profile(request):
+    # Logique pour afficher les informations du profil
+    return render(request, 'profile.html')

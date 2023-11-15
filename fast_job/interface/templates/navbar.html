@@ -14,35 +14,41 @@
                 <img src="{% static 'logo.png' %}" class="mr-2" width="50">
                 FAST JOB
             </a>
-        <!-- Bouton de bascule pour les petits écrans -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Contenu du menu -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'logout' %}">Log Out</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'home' %}#profil">Profil</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'register' %}">Register</a>
-                </li>
-                {% endif %}
-            </ul>
+            <!-- Bouton de bascule pour les petits écrans -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenu du menu -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <!-- Nouvelle div à droite avec les éléments Login, Logout, Register alignés horizontalement -->
+                <div class="d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link text-white" href="{% url 'logout' %}">Log Out</a>
+                        <a class="nav-link text-white ms-2" href="{% url 'user_profile' %}">Profil</a>
+                        <a href="{% url 'user_profile' %}">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABr0lEQVR4nO3ZTYgPcRjA8QeJ5GIluXJwkQOXLSVJODh6uXBRbq5yUOSllNqD5MLBBTntUc5COCgvG2mVvWqpzcVa7UdTf7el+c/81jw03/s085nf1Mwzv4i+vr5OwkYcwyVcx1WcwQ4siexhL576c48wElnDZcyr1xRuYGtkCic16zuOR4awBjOaN4ctGSBHte9mBsidApB3GSDPCkB+YEXXkPfKtLpryGQhyKquIU8KIGY6RQwg4wUgLzJAzheAXMsAOVAAcjADZFsByPYMkAcFIPczQN4UgLzOALlbAHI7A2TPEHPIQlXH7o4MYX8LyL7IFD40QExGtjDWADIW2cImzA45GW6OjOHiP70av6r+WdV8r3zEssicehPjRGQPz2tA3kb2MFEDMhWZw3J8qgH5ipWRNZxTvyuRLYzgVoNvruqf2LoMgPU4W/Nx+l3TuIANXQB2Du7mN+WaxT3sWtQ9FCytZmu8tPi9wuHqnKURo38JsBBotBTixOADr6vmqmtoizjScvor1TwOtdnA+SxPX7C2CeS0fJ1qAnksXw+bQKqlzNb00JC+vr74b/oJzqdHWsS0QR8AAAAASUVORK5CYII=">
+                        </a>
+                    {% else %}
+                        <a class="nav-link text-white" href="{% url 'login' %}">Log In</a>
+                        <a class="nav-link text-white ms-2" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+                
+                
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</body>
+</html>
