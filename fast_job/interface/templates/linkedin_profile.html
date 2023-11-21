@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Profil LinkedIn</h2>
+  <p>Bienvenue, {{ request.user.first_name }} {{ request.user.last_name }}!</p>
+
+  <h3>Informations LinkedIn</h3>
+  <p>Prénom: {{ linkedin_data.first_name }}</p>
+  <p>Nom: {{ linkedin_data.last_name }}</p>
+  <p>Titre: {{ linkedin_data.headline }}</p>
+  <p>Localisation: {{ linkedin_data.location.name }}</p>
+  <p>Industrie: {{ linkedin_data.industry }}</p>
+
+  <h3>Compétences</h3>
+  <ul>
+    {% for skill in linkedin_data.skills %}
+      <li>{{ skill.skill.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <!-- Ajoutez d'autres informations du profil LinkedIn selon vos besoins -->
+
+  <a href="{% url 'logout' %}">Se déconnecter</a>
+{% endblock %}

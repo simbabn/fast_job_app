@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'interface',
+    'social_django',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.oauth2'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'fast_job.urls'
@@ -56,7 +62,7 @@ ROOT_URLCONF = 'fast_job.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +74,16 @@ TEMPLATES = [
         },
     },
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'oauth2': {
+        'SCOPE': ['email', 'openid'],  # Ajoutez d'autres scopes nécessaires
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},  # Optionnel, pour forcer la réauthentification
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': True,
+    },
+}
+
 
 WSGI_APPLICATION = 'fast_job.wsgi.application'
 
@@ -131,3 +147,74 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+
+# Configurez ces paramètres pour utiliser le backend SMTP avec allauth
+# Chemin vers les templates d'e-mails d'Allauth
+LOGIN_REDIRECT_URL = 'home'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Fast Job] '
+
+# Les chemins vers les templates d'e-mails
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = None
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+SITE_ID = 1 
+
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Fast Job] '
+LOGIN_REDIRECT_URL = 'home'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'  # Exemple : 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'bensouiki98@outlook.fr'
+EMAIL_HOST_PASSWORD = 'esiea2016'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SOCIAL_AUTH_OUTLOOK_KEY = 'VOTRE_CLE'
+SOCIAL_AUTH_OUTLOOK_SECRET = 'VOTRE_SECRET'
+
+# settings.py
+
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '784so76xwxx39k'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = '682rDdEW21x72zS5'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
+
+
+
+
+PASSWORD_CHANGE_REDIRECT_URL = 'profile'

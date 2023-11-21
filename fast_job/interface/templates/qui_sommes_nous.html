@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img src="{% static 'logo.png' %}" alt="Logo" class="img-fluid mb-3">
+                <h1 class="mt-3">Qui sommes nous ?</h1>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-8 offset-md-2">
+                <p>Fast Job est un aggrégateur d'offres d'emploi, rapide et simple d'utilisation.</p>
+                <p>Une grande propblématique est présente aujourd'hui dans la recherche d'emploi : centraliser sa recherche d'offres d'emploi.
+                    On a conçu un SaaS qui permet de récupérer les offres de différents endroits pour vous les proposer sur une seule plateforme.</>
+
+                </p>
+
+                <div class="mt-4 d-flex">
+                    <img src="{% static 'pole_emploi_logo.png' %}" alt="Pôle Emploi" class="logo img_--fluid">
+                    <img src="{% static 'indeed_logo.png' %}" alt="Indeed" class="logo img-fluid">
+                    <img src="{% static 'welcome_to_the_jungle_logo.png' %}" alt="Welcome to the Jungle" class="logo img-fluid">
+                    <img src="{% static 'monster_logo.png' %}" alt="Monster" class="logo img-fluid">
+                    <img src="{% static 'jobteaser_logo.png' %}" alt="JobTeaser" class="logo img-fluid">
+                </div>
+                <br/>
+                <a type="submit" href="{% url 'home' %}" class="btn btn-primary">Accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Ajoutez une classe CSS personnalisée pour définir la taille des logos */
+        .logo {
+            width: 110px; /* Ajustez la taille en pixels selon vos besoins */
+            height: auto; /* Garantit que la proportion est conservée */
+            margin-right: 30px; /* Ajoute un espace entre les logos si nécessaire */
+        }
+    </style>
+{% endblock %}

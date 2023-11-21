@@ -3,10 +3,9 @@
 
 {% block content %}
     <div class="container mt-4">
-        
         <div class="row">
             <div class="col-md-12 text-center">
-                <img src="{% static 'logo.png' %}"  alt="Logo du site" style="max-width: 100px;">
+                <img src="{% static 'logo.png' %}" alt="Logo du site" style="max-width: 100px;">
                 <h1 class="mt-3">Bienvenue sur l'Aggrégateur d'Offres d'Emploi</h1>
             </div>
         </div>
@@ -15,10 +14,49 @@
             <button id="toggle-filters" class="btn btn-secondary">Afficher les filtres</button>
         </div>
         
-        <form method="get" id="filter-form" style="display: none;">
-            {{ filter_form.as_p }}
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </form>
+        <div class="row mt-4">
+            <div class="col-md-6 offset-md-3">
+                <form method="get" id="filter-form" style="display: none;">
+                    <div class="card p-4">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="{{ filter_form.keywords.id_for_label }}">Mots-clés</label>
+                                {{ filter_form.keywords }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-5">
+                                <label for="{{ filter_form.type_contrat.id_for_label }}">Type de contrat</label>
+                                {{ filter_form.type_contrat }}
+                            </div>
+                            <div class="col-md-5">
+                                <label for="{{ filter_form.lieu_travail.id_for_label }}">Lieu de travail</label>
+                                {{ filter_form.lieu_travail }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label for="{{ filter_form.duree_contrat.id_for_label }}">Durée du contrat</label>
+                                {{ filter_form.duree_contrat }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ filter_form.alternance.id_for_label }}">Alternance</label>
+                                {{ filter_form.alternance }}
+                            </div>
+                            <!-- Ajoutez d'autres champs du formulaire UserProfileForm -->
+                        </div>
+                        <div class="row mt-4">
+
+                            <div class="col-md-12">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+                                <button type="reset" class="btn btn-danger btn-block" onclick="resetFilters()">Réinitialiser les filtres</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="row mt-4">
             {% if offres_emplois %}
@@ -26,14 +64,23 @@
                     <div class="col-md-4 mb-4">
                         <div class="job-listing card h-100">
                             <div class="card-body d-flex flex-column justify-content-between" style="background-color: #EFF3F6;">
+                                {% if offre.entreprise_logo %}
+                                    <img src="{{ offre.entreprise_logo }}" alt="Logo de l'entreprise" class="mr-1" style="max-width: 100px;">
+                                {% endif %}
+                                {% if offre.entreprise_nom %}
+                                    <h3 class="card-title" style="color: #2E3A44;">{{ offre.entreprise_nom }}</h3>
+                                {% endif %}
                                 <div>
-                                    <h3 class="card-title" style="color: #2E3A44;">{{ offre.intitule }}</h3>
+                                    <h4 class="card-title" style="color: #2E3A44;">{{ offre.intitule }}</h4>
 
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item"><strong>Date:</strong> {{ offre.dateCreation }}</li>
+                                        <li class="list-group-item"><strong>Métier :</strong> {{ offre.appellationlibelle }}</li>
                                         <li class="list-group-item"><strong>Lieu de travail:</strong> {{ offre.lieuTravail_libelle }}</li>
                                         <li class="list-group-item"><strong>Type de contrat:</strong> {{ offre.typeContrat}}  {{ offre.typeContratLibelle }}</li>
+                                        {% if offre.entreprise_nom %}
                                         <li class="list-group-item"><strong>Entreprise:</strong> {{ offre.entreprise_nom }}</li>
+                                        {% endif %}
                                         <li class="list-group-item">
                                             <strong>Salaire:</strong>
                                             {% if offre.salaire_libelle %}
@@ -100,8 +147,6 @@
         </div>
     </div>
 
-
-
     <script>
         document.getElementById('toggle-filters').addEventListener('click', function () {
             var filterForm = document.getElementById('filter-form');
@@ -111,6 +156,10 @@
                 filterForm.style.display = 'none';
             }
         });
+    
+        function resetFilters() {
+            document.getElementById("filter-form").reset();
+        }
     </script>
     
     <style>

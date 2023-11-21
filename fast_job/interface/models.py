@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import render
-
+from django import forms
 
 class Record(models.Model):
     intitule = models.CharField(max_length=150)
@@ -53,7 +53,7 @@ class OffreEmploi(models.Model):
     agence = models.TextField()
     complementExercice = models.TextField()
     experienceCommentaire = models.TextField()
-    conditionExercice = models.TextField()
+    # conditionExercice = models.TextField()
     lieuTravail_libelle = models.TextField()
     lieuTravail_latitude = models.FloatField(null=True)
     lieuTravail_longitude = models.FloatField(null=True)
@@ -101,7 +101,6 @@ class UserProfile(models.Model):
     compte_linkedin = models.URLField(blank=True)
     compte_twitter = models.CharField(max_length=100, blank=True)
     compte_github = models.URLField(blank=True)
-    offres_enregistrees = models.ManyToManyField(OffreEmploi, related_name='utilisateurs_enregistres')
 
     def __str__(self):
         return self.user.username

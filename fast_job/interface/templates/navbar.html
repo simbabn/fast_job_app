@@ -25,9 +25,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'qui_sommes_nous' %}">Qui sommes nous ?</a>
+                    </li>
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{% url 'home' %}#accueil">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'qui_sommes_nous' %}">Qui sommes nous ?</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -1,0 +1,26 @@
+{% comment %} {% load i18n %}
+{% autoescape off %}
+{% load account %}
+
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+
+Bonjour {{ user }},
+
+Merci de vous être inscrit sur {{ site_name }}. Pour confirmer votre inscription, veuillez suivre le lien ci-dessous :
+
+{{ protocol }}://{{ site_domain }}{% url 'account_confirm_email' key=confirmation_key %}?next=/votre-redirection-personnalisee/
+
+Si vous n'avez pas demandé cette inscription, vous pouvez ignorer cet e-mail.
+
+{% endblocktrans %}
+
+{% endautoescape %} {% endcomment %}
+
+Bonjour!
+
+Merci de vous être inscrit sur Fast Job. Pour confirmer votre inscription, veuillez cliquer sur le lien ci-dessous:
+
+{{ activate_url }}
+
+Cordialement,
+L'équipe Fast Job

@@ -4,16 +4,21 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect,  get_object_or_404
 from .forms import SignUpForm, OffreEmploiFilterForm, UserProfileForm
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView,PasswordChangeView, PasswordResetConfirmView, PasswordResetCompleteView
 from .models import OffreEmploi, UserProfile
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
+from django.views.generic import DetailView
 
 
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+
+def account_created(request):
+    return render(request, 'account_created.html')
 
 def login_user(request):
     if request.method == 'POST':
@@ -86,13 +91,14 @@ def home(request):
         if keywords:
             # Recherche dans les champs pertinents (ajoutez d'autres champs si nécessaire)
             filtered_offreemploi = filtered_offreemploi.filter(
+                Q(appellationlibelle__icontains=keywords) |
                 Q(intitule__icontains=keywords) |
                 Q(description__icontains=keywords)
             )
         if type_contrat:
-            filtered_offreemploi = filtered_offreemploi.filter(typeContratLibelle__icontains=type_contrat)
+            filtered_offreemploi = filtered_offreemploi.filter(typeContrat__icontains=type_contrat)
         if lieu_travail:
-            filtered_offreemploi = filtered_offreemploi.filter(lieuTravail__icontains=lieu_travail)
+            filtered_offreemploi = filtered_offreemploi.filter(lieuTravail_libelle__icontains=lieu_travail)
         if duree_contrat:
             filtered_offreemploi = filtered_offreemploi.filter(dureeTravailLibelle__icontains=duree_contrat)
         if alternance:
@@ -152,13 +158,15 @@ def register_user(request):
             user.userprofile.compte_twitter = form.cleaned_data['compte_twitter']
             user.userprofile.compte_github = form.cleaned_data['compte_github']
             user.userprofile.save()
+            
             # Authenticate and login
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=username, password=password)
             login(request, user)
+
             messages.success(request, "You Have Successfully Registered! Welcome!")
-            return redirect('home')
+            return redirect('account_created')
     else:
         form = SignUpForm()
     return render(request, 'register.html', {'form': form})
@@ -261,3 +269,76 @@ def edit_profile(request):
 def view_profile(request):
     # Logique pour afficher les informations du profil
     return render(request, 'profile.html')
+
+def qui_sommes_nous_view(request):
+    return render(request, 'qui_sommes_nous.html')
+
+
+@login_required
+def linkedin_profile(request):
+    user = request.user
+    linkedin_social = user.social_auth.get(provider='linkedin-oauth2')
+    linkedin_data = linkedin_social.extra_data
+
+    return render(request, 'linkedin_profile.html', {'linkedin_data': linkedin_data})
+
+@login_required
+def delete_user(request):
+    if request.method == 'POST':
+        # Supprimer l'utilisateur
+        user = request.user
+        user.delete()
+        
+        # Se déconnecter
+        logout(request)
+        messages.success(request, "Votre compte a été supprimé avec succès.")
+        
+        # Rediriger vers la page d'accueil
+        return redirect('home')
+
+    return render(request, 'confirmation_delete.html')  # Créez un template pour confirmer la suppression si nécessaire
+
+def update_user(request, pk):
+    if request.user.is_authenticated:
+        user_profile = get_object_or_404(UserProfile, user=request.user)
+
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, instance=user_profile)
+            if form.is_valid():
+                form.save()
+                return redirect('user_profile')
+        else:
+            form = UserProfileForm(instance=user_profile)
+
+        return render(request, 'profile_update.html', {'form': form})
+    else:
+        # Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
+        return redirect('login')
+
+
+
+class ProfileView(DetailView):
+    model = User
+    template_name = 'profile.html'
+    context_object_name = 'user'
+
+###### Mot de passe 
+
+class ChangePasswordView(PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = reverse_lazy('user_profile') 
+    
+    
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'custom_reset_password.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    success_url = '/reset_password_complete/'
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'password_reset_complete.html'

@@ -51,3 +51,11 @@ nav a:hover {
 .login-page {
     min-height: 100vh; /* ou toute autre valeur appropriée */
 }
+
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}

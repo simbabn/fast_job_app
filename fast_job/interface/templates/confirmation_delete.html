@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Confirmation de suppression</h2>
+    <p>Voulez-vous vraiment supprimer votre compte?</p>
+    <form method="post" action="{% url 'delete_user' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Supprimer le compte</button>
+        <a href="{% url 'user_profile' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+{% endblock %}
